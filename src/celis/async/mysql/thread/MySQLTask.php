@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace celis\async\mysql\thread;
 
 use Closure;
+
 use Exception;
+use InvalidArgumentException;
 
 use mysqli;
 
@@ -65,8 +67,6 @@ class MySQLTask extends AsyncTask {
 	}
 
 	public function onRun(): void {
-		$time = microtime(true);
-
 		$responses = [];
 
 		try {
@@ -85,7 +85,6 @@ class MySQLTask extends AsyncTask {
 			}
 		}
 
-		var_dump(microtime(true) - $time);
 		$this->setResult($responses);
 	}
 
@@ -93,7 +92,7 @@ class MySQLTask extends AsyncTask {
 		try {
 			/** @var Closure $closure */
 			$closure = $this->fetchLocal('closure');
-		} catch (\InvalidArgumentException) {
+		} catch (InvalidArgumentException) {
 			return;
 		}
 

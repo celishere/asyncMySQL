@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace celis\async\mysql\model;
 
 use celis\async\mysql\Loader;
@@ -11,12 +13,10 @@ use celis\async\mysql\MySQLResponse;
  *
  * @package celis\async\mysql\model
  *
- * @version 2.0.0
+ * @version 1.0.0
  * @since   1.0.0
  *
  * @author  celis <VK/Telegram/GitHub: @celishere, Email: celispost@icloud.com>
- *
- * @property string $username
  */
 class Model {
 
@@ -26,6 +26,7 @@ class Model {
 	 * @var string[]
 	 */
 	protected array $fillable = [];
+	protected array $ignoreFields = [];
 
 	protected array $data = [];
 
@@ -49,7 +50,9 @@ class Model {
 			sprintf("SELECT * from `%s` where username = '%s'", static::$table, $this->data['username']),
 			function (MySQLResponse $mySQLResponse): void {
 				$response = $mySQLResponse->getResponse();
-				unset($response['username']);
+
+				$keys_to_keep = array_diff_key($response, array_flip($this->ignoreFields));
+				$response = array_intersect_key($response, $keys_to_keep);
 
 				foreach ($response as $key => $value) {
 					$this->{$key} = $value;

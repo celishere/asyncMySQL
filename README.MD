@@ -6,20 +6,20 @@ Plugin for PMMP 4, for working with the database and models (for saving player d
 
 # Usage:
 
-### Creating Model:
+### Creating Model (PlayerModel):
 
 ```php
 <?php
 
 namespace my\plugin\models;
 
-use celis\async\mysql\model\Model;
+use celis\async\mysql\model\PlayerModel;
 
 /**
- * @property string username
  * @property string userdata
  */
-class TestModel extends Model {
+class TestModel extends PlayerModel {
+
 	public static string $table = "test"; // set up the table that we will use
 	protected array $fillable = ["username", "userdata"]; // the data that we will write to the table
 }
@@ -55,10 +55,10 @@ class MyPlugin extends PluginBase implements Listener {
 		$player = $event->getPlayer();
 		
 		$model = new TestModel();
+		$model->setPlayer($player);
 		$model->fetch(); // loading user data, if they exist
 		
-		$model->username = $player->getName();
-		$model->userdata = "foo";
+		$model->userdata = "foo"; // setting data for example
 		
 		$id = Storage::getInstance()->addModel($model); // caching model
 		
@@ -70,6 +70,9 @@ class MyPlugin extends PluginBase implements Listener {
 		
 		/** @var TestModel $model */
 		$model = Storage::getInstance()->getModel(1); // use id
+		
+		print_r($model->userdata); // returns 'foo'
+		
 		$model->userdata = "bar";
 		
 		$model->save(); //saving model
