@@ -50,7 +50,7 @@ class Loader extends PluginBase {
 		}), MySQLThreadPool::GARBAGE_COLLECT_INTERVAL);
 
 		$this->saveResource("config.yml");
-		$data = $this->getConfig()->getAll(true);
+		$data = $this->getConfig()->getAll();
 
 		self::$settings = new MySQLSettings(
 			$data['host'] ?? "localhost",
