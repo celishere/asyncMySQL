@@ -33,6 +33,6 @@ readonly class MySQLResponse {
 	 * @return array
 	 */
 	public function getResponse(): array {
-		return $this->responses[0];
+		return $this->responses[0] ?? [];
 	}
 }
