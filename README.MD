@@ -65,7 +65,7 @@ class MyPlugin extends PluginBase implements Listener {
 		print ($id);
 	}
 	
-	public function onQuit(PlayerQuitEvent): void {
+	public function onQuit(PlayerQuitEvent $event): void {
 		$player = $event->getPlayer();
 		
 		/** @var TestModel $model */
