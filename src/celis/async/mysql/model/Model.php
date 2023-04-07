@@ -50,6 +50,9 @@ class Model {
 			sprintf("SELECT * from `%s` where username = '%s'", static::$table, $this->data['username']),
 			function (MySQLResponse $mySQLResponse): void {
 				$response = $mySQLResponse->getResponse();
+	 			if (empty($response)) {
+					return;
+				}
 
 				$keys_to_keep = array_diff_key($response, array_flip($this->ignoreFields));
 				$response = array_intersect_key($response, $keys_to_keep);
